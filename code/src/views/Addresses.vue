@@ -6,6 +6,15 @@
       </v-flex>
 
       <v-flex xs12 mt-5 justify-center>
+        <router-link :to="{ name: 'addresses_edit' }">
+          <v-btn color="info">
+            連絡先追加
+          </v-btn>
+        </router-link>
+
+      </v-flex>
+
+      <v-flex xs12 mt-5 justify-center>
         <!-- 
           :items="addresses"でaddressesオブジェクトを渡している。
           v-slotでpropsという名前でaddressesを受け取り、
@@ -25,6 +34,9 @@
 
 <script>
 export default {
+  created() {
+    this.address = this.$store.state.addresses
+  },
   data() {
     return {
       headers: [
@@ -33,20 +45,7 @@ export default {
         { text: "メールアドレス", value: "email" },
         { text: "住所", value: "address" },
       ],
-      addresses: [
-        {
-          name: "友人１",
-          tel: "090-0000-1111",
-          email: "sample1@mail.com",
-          address: "東京都渋谷区",
-        },
-        {
-          name: "友人２",
-          tel: "090-2222-3333",
-          email: "sample2@mail.com",
-          address: "東京都品川区",
-        },
-      ],
+      addresses: [],
     };
   },
 };

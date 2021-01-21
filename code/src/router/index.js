@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import AddAddress from '../views/AddressForm.vue'
 
 // 使用するプラグインを指定している VueRouter
 Vue.use(VueRouter)
@@ -8,7 +9,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'home',
     // Homeのように事前にコンポーネントを読み込んでおくのもOKだが
     // 大量に読み込むと処理に時間がかかるのでAboutのように
     // つど読み込む形式でもOK
@@ -16,7 +17,7 @@ const routes = [
   },
   {
     path: '/about',
-    name: 'About',
+    name: 'about',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
@@ -24,12 +25,21 @@ const routes = [
   },
   {
     path: '/addresses',
-    name: 'Address',
+    name: 'addresses',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     // 
-    component: () => import(/* webpackChunkName: "address" */ '../views/Addresses.vue')
+    component: () => import(/* webpackChunkName: "addresses" */ '../views/Addresses.vue')
+  },
+  {
+    path: '/addresses/:address_id?/edit',
+    name: 'addresses_edit',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    // 
+    component: AddAddress
   }
 ]
 
