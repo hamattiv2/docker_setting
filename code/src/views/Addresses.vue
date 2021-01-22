@@ -35,7 +35,7 @@
 <script>
 export default {
   created() {
-    this.address = this.$store.state.addresses
+    this.addresses = this.$store.state.addresses
   },
   data() {
     return {

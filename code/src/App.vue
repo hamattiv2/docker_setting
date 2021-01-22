@@ -36,6 +36,7 @@ export default {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.setLoginUser(user)
+        this.fetchAddresses()
         if(this.$router.currentRoute.name === "home") this.$router.push({'name': "addresses"})
       } else {
         this.deleteLoginUser()
@@ -53,7 +54,7 @@ export default {
     //   // this.$store.dispatchでvuexのactionにアクセスする
     //   this.$store.dispatch("actionToggleSideMenu")
     // },
-    ...mapActions(["actionToggleSideMenu", "setLoginUser", "logout", "deleteLoginUser"]),
+    ...mapActions(["actionToggleSideMenu", "setLoginUser", "logout", "deleteLoginUser", "fetchAddresses"]),
   },
 };
 </script>

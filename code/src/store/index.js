@@ -12,10 +12,6 @@ export default new Vuex.Store({
   },
   mutations: {
     setLoginUser(state, user) {
-      if (user) {
-        console.log(user.photoURL)
-        console.log(user.displayName)
-      }
       state.login_user = user 
     },
     deleteLoginUser(state) {
@@ -38,6 +34,12 @@ export default new Vuex.Store({
     logout() {
       firebase.auth().signOut()
     },
+    fetchAddresses({ getters, commit }) {
+      firebase.firestore().collection(`users/${getters.uid}/addresses`).get().then(snapshot => {
+          snapshot.forEach(doc => commit("addAddress", doc.data()))
+        }
+      )
+    },
     login () {
       // const provider = new firebase.auth.GoogleAuthProvider()
       // firebase.auth().signInWithRedirect(provider)
@@ -52,7 +54,7 @@ export default new Vuex.Store({
       commit('toggleSideMenu')
     },
     addAddress({ getters, commit }, address) {
-      if (getters.uid) firebase.firestore().collection("users/${getters.uid}/addresses").add(address)
+      if (getters.uid) firebase.firestore().collection(`users/${getters.uid}/addresses`).add(address)
       commit('addAddress', address)
     }
   },
