@@ -19,8 +19,11 @@
 `firebase init`
 
 -> Hosting
+
 -> What do you want to use as your public directory? -> dist
+
 -> Configure as a single-page app (rewrite all urls to /index.html)? -> Y
+
 -> Set up automatic builds and deploys with GitHub? -> N
 
 `npm run build`
