@@ -20,8 +20,13 @@ export default new Vuex.Store({
     toggleSideMenu(state) {
       state.drawer = !state.drawer
     },
-    addAddress(state, address) {
+    addAddress(state, {id, address}) {
+      address.id = id
       state.addresses.push(address)
+    },
+    updateAddress(state, {id, address}) {
+      const index = state.addresses.findIndex(ad => ad.id === id)
+      state.addresses[index] = address
     }
   },
   actions: {
@@ -36,7 +41,7 @@ export default new Vuex.Store({
     },
     fetchAddresses({ getters, commit }) {
       firebase.firestore().collection(`users/${getters.uid}/addresses`).get().then(snapshot => {
-          snapshot.forEach(doc => commit("addAddress", doc.data()))
+          snapshot.forEach(doc => commit("addAddress", {id: doc.id, address: doc.data()}))
         }
       )
     },
@@ -44,7 +49,6 @@ export default new Vuex.Store({
       // const provider = new firebase.auth.GoogleAuthProvider()
       // firebase.auth().signInWithRedirect(provider)
       const google_auth_provider = new firebase.auth.GoogleAuthProvider()
-      console.log(google_auth_provider)
       firebase.auth().signInWithRedirect(google_auth_provider)
     },
     // { commit }とすることで、context内のcommitだけ受け取ることが可能。
@@ -54,14 +58,26 @@ export default new Vuex.Store({
       commit('toggleSideMenu')
     },
     addAddress({ getters, commit }, address) {
-      if (getters.uid) firebase.firestore().collection(`users/${getters.uid}/addresses`).add(address)
-      commit('addAddress', address)
+      if (getters.uid) {
+        firebase.firestore().collection(`users/${getters.uid}/addresses`).add(address).then(doc => {
+          commit('addAddress', {id: doc.id , address})
+        })
+      }
+    },
+    updateAddress({ getters, commit }, {id, address}) {
+      if (getters.uid) {
+        firebase.firestore().collection(`users/${getters.uid}/addresses`).doc(id).update(address).then(() => {
+          commit('updateAddress', {id: id , address})
+        })
+      }
     }
   },
   getters: {
     userName: state => state.login_user ? state.login_user.displayName : "",
     photoUrl: state => state.login_user ? state.login_user.photoURL: "" ,
-    uid: state => state.login_user ? state.login_user.uid : null
+    uid: state => state.login_user ? state.login_user.uid : null,
+    getAddressById: state => id => state.addresses.find(address => address.id === id)
+
   },
   modules: {
   }
